@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -10,6 +11,10 @@ public class Category {
      * List of the used variables for the category.
      */
     private ArrayList<Variable> variables;
+
+    public boolean addAll(Collection<? extends Variable> c) {
+        return variables.addAll(c);
+    }
 
     /**
      * Standard constructor.
