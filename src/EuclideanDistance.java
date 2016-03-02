@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Return distance following the euclidean method.
@@ -12,7 +11,7 @@ public class EuclideanDistance implements Distance {
         double distance=0;
         for (Variable var :
                 variables) {
-            distance =Math.pow((a.get(var)+b.get(var)),2);
+            distance =Math.pow((a.get(var)-b.get(var)),2);
         }
         return Math.sqrt(distance);
     }
