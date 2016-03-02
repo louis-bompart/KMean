@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 /**
+ * A category used for the run of KMean algorithm.
  * Created by louis on 02/03/2016.
  */
 public class Category {

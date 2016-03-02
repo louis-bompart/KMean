@@ -1,4 +1,5 @@
 /**
+ * A variable, used for better understanding in other classes than a simple integer.
  * Created by louis on 02/03/2016.
  */
 public class Variable {

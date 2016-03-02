@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 /**
+ * Class where all the magic happens, the KMean algorithm is executed right here.
  * Created by louis on 02/03/2016.
  */
 
