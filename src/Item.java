@@ -29,5 +29,17 @@ public class Item {
         values = new HashMap<>();
     }
 
-    //TODO: Implements delegate methods of values as needed.
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Double put(Variable key, Double value) {
+        return values.put(key, value);
+    }
+
+//TODO: Implements delegate methods of values as needed.
 }

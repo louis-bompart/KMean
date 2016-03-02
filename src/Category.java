@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * A category used for the run of KMean algorithm.
@@ -18,4 +19,32 @@ public class Category {
         this.variables = new ArrayList<>();
     }
     //TODO: Implements delegate methods of variable (e.g:set,get,etc...) as needed.
+
+    /**
+     * @param items the data set used in which we want to find the barycenter.
+     * @return The barycenter of the class -WARNING : it's a "virtual" item !
+     */
+    public Item computeBarycenter(Set<Item> items) {
+        //Initialization of the barycenter.
+        Item barycenter = new Item();
+        barycenter.setCategory(this);
+        for (Variable var :
+                variables) {
+            barycenter.put(var, 0d);
+        }
+
+        for (Item item :
+                items) {
+            for (Variable var :
+                    variables) {
+                barycenter.put(var, barycenter.get(var) + item.get(var));
+            }
+        }
+
+        for (Variable var :
+                variables) {
+            barycenter.put(var, barycenter.get(var)/items.size());
+        }
+        return barycenter;
+    }
 }
