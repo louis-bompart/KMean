@@ -36,8 +36,8 @@ public class CategoryTest {
         items.add(b);
 
         category.addAll(a.keySet());
-
-        Item barycenter = category.computeBarycenter(items);
+        category.computeBarycenter(items);
+        Item barycenter =  category.getBarycenter();
         for (Variable var :
                 variables) {
             assert (barycenter.get(var) == 8d);

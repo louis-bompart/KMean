@@ -12,6 +12,12 @@ public class Category {
      */
     private ArrayList<Variable> variables;
 
+    public ArrayList<Variable> getVariables() {
+        return variables;
+    }
+
+    private Item barycenter;
+
     public boolean addAll(Collection<? extends Variable> c) {
         return variables.addAll(c);
     }
@@ -29,7 +35,7 @@ public class Category {
      * @param items the data set used in which we want to find the barycenter.
      * @return The barycenter of the class -WARNING : it's a "virtual" item !
      */
-    public Item computeBarycenter(Set<Item> items) {
+    public boolean computeBarycenter(Set<Item> items) {
         //Initialization of the barycenter.
         Item barycenter = new Item();
         barycenter.setCategory(this);
@@ -50,6 +56,19 @@ public class Category {
                 variables) {
             barycenter.put(var, barycenter.get(var)/items.size());
         }
+        if(this.barycenter.equals(barycenter))
+        {
+            return true;
+        }
+        this.barycenter = barycenter;
+        return false;
+    }
+
+    public Item getBarycenter() {
         return barycenter;
+    }
+
+    public void setBarycenter(Item barycenter) {
+        this.barycenter = barycenter;
     }
 }

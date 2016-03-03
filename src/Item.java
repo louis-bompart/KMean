@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An item of a data set.
@@ -18,6 +15,18 @@ public class Item {
     public Double get(Object key) {
         //noinspection SuspiciousMethodCalls
         return values.get(key);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.getClass().equals(Item.class))
+        for (Variable variable :
+                category.getVariables()) {
+                if (!Objects.equals(((Item) obj).get(variable), values.get(variable))) {
+                    return false;
+                }
+            }
+        return ((Item)obj).getCategory().equals(category);
     }
 
     /**
@@ -41,5 +50,4 @@ public class Item {
         return values.put(key, value);
     }
 
-//TODO: Implements delegate methods of values as needed.
 }
