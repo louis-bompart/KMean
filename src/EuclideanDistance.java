@@ -5,13 +5,18 @@ import java.util.ArrayList;
  * Created by louis on 02/03/2016.
  */
 public class EuclideanDistance implements Distance {
+    /**
+     * @param item One of the item of the dataset
+     * @param center The center to measure distance.
+     * @return the distance.
+     */
     @Override
-    public double computeDistance(Item a, Item b) {
-        ArrayList<Variable> variables = new ArrayList<>(a.keySet());
+    public double computeDistance(Item item, Item center) {
+        ArrayList<Variable> variables = center.getCategory().getVariables();
         double distance=0;
         for (Variable var :
                 variables) {
-            distance =Math.pow((a.get(var)-b.get(var)),2);
+            distance =Math.pow((item.get(var)-center.get(var)),2);
         }
         return Math.sqrt(distance);
     }
