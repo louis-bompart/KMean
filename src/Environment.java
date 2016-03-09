@@ -7,19 +7,45 @@ import java.util.*;
 
 public class Environment {
 
+    /**
+     * The distance used to compute.
+     */
     private final Distance distance = new EuclideanDistance();
 
-    private final int RANGE=100;
+    /**
+     * The distance used to compute variance.
+     */
+    private final Distance varianceDistance = new SquaredEuclideanDistance();
+
     /**
      * List of used categories for the run of K-means.
      */
     private ArrayList<Category> categories;
+
     /**
      * Data set used for the run of K-means.
      */
     private ArrayList<Item> dataSet;
 
+    /**
+     * Collection of initial data sets, identified by id.
+     */
+    private Map<Integer,ArrayList<Item>> initialDataSets;
+
+    /**
+     * Collection of final variance, identified by id (same as up).
+     */
+    private Map<Integer,Double> finalVariance;
+
+    /**
+     * Store item in different collection and by category.
+     */
     private Map<Category,Set<Item>> itemsByCategory;
+
+    /**
+     * The current ID.
+     */
+    private int currentIterationID;
 
     /**
      * Standard constructor.
@@ -29,6 +55,9 @@ public class Environment {
         categories = new ArrayList<>();
         dataSet = new ArrayList<>();
         itemsByCategory = new HashMap<>();
+        initialDataSets = new HashMap<>();
+        finalVariance = new HashMap<>();
+        currentIterationID=0;
     }
 
     //TODO: Implements delegate methods of categories and dataSet as needed.
@@ -36,13 +65,22 @@ public class Environment {
     /**
      * The magical function. It does everything (well running the KMean algorithm.)
      */
-    public void computeKMean() {
-        Random rnd = new Random();
-        generateRandomCenter();
-        boolean done = false;
-        while (!done) {
-            affectAllItems();
-            done = findGravityCenter();
+    public void computeKMean(int nbIt) {
+        while (currentIterationID<nbIt) {
+            //generateRandomCenter();
+            for (Category category :
+                    categories) {
+                itemsByCategory.put(category, new HashSet<>());
+            }
+            randomlyAffectAllItems();
+            findGravityCenter();
+            boolean done = false;
+            while (!done) {
+                affectAllItems();
+                done = findGravityCenter();
+            }
+            computeVariance();
+            currentIterationID++;
         }
     }
 
@@ -65,15 +103,38 @@ public class Environment {
     }
 
     /**
+     * Randomly affect all items.
+     */
+    private void randomlyAffectAllItems() {
+        Random rnd = new Random();
+        for (Item item :
+                dataSet) {
+            item.setCategory(categories.get(rnd.nextInt(categories.size())));
+            itemsByCategory.get(item.getCategory()).add(item);
+        }
+
+        initialDataSets.put(currentIterationID, new ArrayList<>(dataSet));
+    }
+
+    /**
+     * Compute the variance of the beginning.
+     */
+    private void computeVariance() {
+        double variance=0d;
+        for (Category category :
+                categories) {
+            for (Item item :
+                    itemsByCategory.get(category)) {
+                variance+=varianceDistance.computeDistance(item,category.getBarycenter());
+            }
+        }
+        finalVariance.put(currentIterationID,variance);
+    }
+
+    /**
      * Affect all items in the right category.
      */
     private void affectAllItems() {
-        //Initialization
-        for (Category category :
-                categories) {
-            itemsByCategory.put(category,new HashSet<>());
-        }
-
         for (Item item :
                 dataSet) {
             Item nearest = null;
@@ -100,6 +161,7 @@ public class Environment {
         }
         return isComplete;
     }
+
     /*
     *   First thought, but implementing this in affectAllItems avoid to
     *   loop on dataSet once more
