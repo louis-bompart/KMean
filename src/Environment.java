@@ -60,12 +60,16 @@ public class Environment {
         currentIterationID=0;
     }
 
-    //TODO: Implements delegate methods of categories and dataSet as needed.
+    public boolean add(Item item) {
+        return dataSet.add(item);
+    }
+//TODO: Implements delegate methods of categories and dataSet as needed.
 
     /**
      * The magical function. It does everything (well running the KMean algorithm.)
      */
-    public void computeKMean(int nbIt) {
+    public void computeKMean(int nbIt, int nbCat) {
+
         while (currentIterationID<nbIt) {
             //generateRandomCenter();
             for (Category category :
