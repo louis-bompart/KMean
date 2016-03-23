@@ -69,7 +69,7 @@ public class Environment {
      * The magical function. It does everything (well running the KMean algorithm.)
      */
     public void computeKMean(int nbIt, int nbCat) {
-
+        generateRandomCategories(nbCat);
         while (currentIterationID<nbIt) {
             //generateRandomCenter();
             for (Category category :
@@ -85,6 +85,13 @@ public class Environment {
             }
             computeVariance();
             currentIterationID++;
+        }
+    }
+
+    private void generateRandomCategories(int nbCat) {
+        for (int i = 0; i < nbCat; i++) {
+            categories.add((new Category()));
+            categories.get(i).addAll(dataSet.get(0).keySet());
         }
     }
 
@@ -182,4 +189,11 @@ public class Environment {
             itemsByCategory.get(item.getCategory()).add(item);
         }
     }*/
+
+    private void displayResult() {
+        for (int i = 0; i < currentIterationID; i++) {
+            System.out.print("For iteration #" + i);
+            System.out.println(": "+ finalVariance.get(i));
+        }
+    }
 }
