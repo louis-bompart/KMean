@@ -16,4 +16,8 @@ public class Variable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public double distance(Item a, Item b) {
+        return Math.pow((a.get(this)-b.get(this)),2);
+    }
 }

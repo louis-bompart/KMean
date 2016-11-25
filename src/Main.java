@@ -6,14 +6,14 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] Args){
         String path = "data.csv";
-        int nbCategory = 3;
-        int nbIteration = 30;
+        int clusterSize = 16;
+        int nbIteration = 10;
         Environment environment= new Environment();
         try {
             new Reader(path, environment);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        environment.computeKMean(nbIteration, nbCategory);
+        environment.computeKMean(nbIteration, clusterSize);
     }
 }

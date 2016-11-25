@@ -36,7 +36,7 @@ public class Cluster {
      * @param items the data set used in which we want to find the barycenter.
      * @return The barycenter of the class -WARNING : it's a "virtual" item !
      */
-    public boolean computeBarycenter(Set<Item> items) {
+    public boolean computeBarycenter(Collection<Item> items) {
         //Initialization of the barycenter.
         oldBarycenter=barycenter;
         Item barycenter = new Item();
