@@ -6,7 +6,7 @@ import java.util.Set;
  * A category used for the run of KMean algorithm.
  * Created by louis on 02/03/2016.
  */
-public class Category {
+public class Cluster {
     /**
      * List of the used variables for the category.
      */
@@ -17,6 +17,7 @@ public class Category {
     }
 
     private Item barycenter;
+    private Item oldBarycenter;
 
     public boolean addAll(Collection<? extends Variable> c) {
         return variables.addAll(c);
@@ -26,7 +27,7 @@ public class Category {
      * Standard constructor.
      * Just initialize Arrays properly.
      */
-    public Category() {
+    public Cluster() {
         this.variables = new ArrayList<>();
     }
     //TODO: Implements delegate methods of variable (e.g:set,get,etc...) as needed.
@@ -37,8 +38,9 @@ public class Category {
      */
     public boolean computeBarycenter(Set<Item> items) {
         //Initialization of the barycenter.
+        oldBarycenter=barycenter;
         Item barycenter = new Item();
-        barycenter.setCategory(this);
+        barycenter.setCluster(this);
         for (Variable var :
                 variables) {
             barycenter.put(var, 0d);
@@ -56,12 +58,8 @@ public class Category {
                 variables) {
             barycenter.put(var, barycenter.get(var)/items.size());
         }
-        if(this.barycenter.equals(barycenter))
-        {
-            return true;
-        }
         this.barycenter = barycenter;
-        return false;
+        return barycenter.equals(oldBarycenter);
     }
 
     public Item getBarycenter() {

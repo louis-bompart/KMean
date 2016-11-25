@@ -12,11 +12,11 @@ public class EuclideanDistance implements Distance {
      */
     @Override
     public double computeDistance(Item item, Item center) {
-        ArrayList<Variable> variables = center.getCategory().getVariables();
+        ArrayList<Variable> variables = center.getCluster().getVariables();
         double distance=0;
         for (Variable var :
                 variables) {
-            distance =Math.pow((item.get(var)-center.get(var)),2);
+                distance =Math.pow((item.get(var)-center.get(var)),2);
         }
         return Math.sqrt(distance);
     }

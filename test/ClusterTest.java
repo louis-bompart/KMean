@@ -3,17 +3,15 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-
 /**
  * Test of category.
  * Created by louis on 02/03/2016.
  */
-public class CategoryTest {
+public class ClusterTest {
 
     @Test
     public void testComputeBarycenter() throws Exception {
-        Category category = new Category();
+        Cluster cluster = new Cluster();
         Set<Item> items = new HashSet<>();
 
         //Create some variables
@@ -35,13 +33,13 @@ public class CategoryTest {
         items.add(a);
         items.add(b);
 
-        category.addAll(a.keySet());
-        category.computeBarycenter(items);
-        Item barycenter =  category.getBarycenter();
+        cluster.addAll(a.keySet());
+        cluster.computeBarycenter(items);
+        Item barycenter =  cluster.getBarycenter();
         for (Variable var :
                 variables) {
             assert (barycenter.get(var) == 8d);
         }
-        assert (barycenter.getCategory().equals(category));
+        assert (barycenter.getCluster().equals(cluster));
     }
 }
