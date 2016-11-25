@@ -5,7 +5,7 @@ import java.util.*;
  * Created by louis on 02/03/2016.
  */
 public class Item {
-    private Category category;
+    private Cluster cluster;
     private Map<Variable,Double> values;
 
     public Set<Variable> keySet() {
@@ -19,14 +19,17 @@ public class Item {
 
     @Override
     public boolean equals(Object obj) {
+        if(obj==null) {
+            return false;
+        }
         if(obj.getClass().equals(Item.class))
         for (Variable variable :
-                category.getVariables()) {
+                cluster.getVariables()) {
                 if (!Objects.equals(((Item) obj).get(variable), values.get(variable))) {
                     return false;
                 }
             }
-        return ((Item)obj).getCategory().equals(category);
+        return ((Item)obj).getCluster().equals(cluster);
     }
 
     /**
@@ -34,16 +37,16 @@ public class Item {
      * Just initialize class' variables.
      */
     public Item() {
-        category = null;
+        cluster = null;
         values = new HashMap<>();
     }
 
-    public Category getCategory() {
-        return category;
+    public Cluster getCluster() {
+        return cluster;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCluster(Cluster cluster) {
+        this.cluster = cluster;
     }
 
     public Double put(Variable key, Double value) {

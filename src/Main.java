@@ -5,9 +5,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] Args){
-        String path = "yolo";
-        int nbCategory = 42;
-        int nbIteration = 20;
+        String path = "data.csv";
+        int nbCategory = 3;
+        int nbIteration = 30;
         Environment environment= new Environment();
         try {
             new Reader(path, environment);

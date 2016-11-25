@@ -16,9 +16,9 @@ public class Reader {
         ArrayList<Variable> variables = new ArrayList<>();
         boolean initialized = false;
         while ((line = br.readLine()) != null) {
-            String[] input = line.split(",");
+            String[] input = line.split(";");
             Item item = new Item();
-            for(int i = 0; i < input.length; i++){
+            for(int i = 0; i < input.length-1; i++){
                 if(!initialized){
                     variables.add(new Variable(i));
                 }

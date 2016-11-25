@@ -12,7 +12,7 @@ public class SquaredEuclideanDistance implements Distance {
      */
     @Override
     public double computeDistance(Item item, Item center) {
-        ArrayList<Variable> variables = center.getCategory().getVariables();
+        ArrayList<Variable> variables = center.getCluster().getVariables();
         double distance=0;
         for (Variable var :
                 variables) {

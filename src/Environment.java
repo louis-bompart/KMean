@@ -20,7 +20,7 @@ public class Environment {
     /**
      * List of used categories for the run of K-means.
      */
-    private ArrayList<Category> categories;
+    private ArrayList<Cluster> categories;
 
     /**
      * Data set used for the run of K-means.
@@ -40,7 +40,7 @@ public class Environment {
     /**
      * Store item in different collection and by category.
      */
-    private Map<Category,Set<Item>> itemsByCategory;
+    private Map<Cluster,Set<Item>> itemsByCategory;
 
     /**
      * The current ID.
@@ -57,7 +57,7 @@ public class Environment {
         itemsByCategory = new HashMap<>();
         initialDataSets = new HashMap<>();
         finalVariance = new HashMap<>();
-        currentIterationID=0;
+        currentIterationID=1;
     }
 
     public boolean add(Item item) {
@@ -70,27 +70,29 @@ public class Environment {
      */
     public void computeKMean(int nbIt, int nbCat) {
         generateRandomCategories(nbCat);
-        while (currentIterationID<nbIt) {
+        while (currentIterationID<nbIt+1) {
             //generateRandomCenter();
-            for (Category category :
+            for (Cluster cluster :
                     categories) {
-                itemsByCategory.put(category, new HashSet<>());
+                itemsByCategory.put(cluster, new HashSet<>());
             }
             randomlyAffectAllItems();
             findGravityCenter();
             boolean done = false;
             while (!done) {
                 affectAllItems();
+                //RemoveFurthests();
                 done = findGravityCenter();
             }
             computeVariance();
+            displayResult();
             currentIterationID++;
         }
     }
 
     private void generateRandomCategories(int nbCat) {
         for (int i = 0; i < nbCat; i++) {
-            categories.add((new Category()));
+            categories.add((new Cluster()));
             categories.get(i).addAll(dataSet.get(0).keySet());
         }
     }
@@ -102,13 +104,13 @@ public class Environment {
         Random rnd = new Random();
         Set<Item> tmp = new HashSet<>();
         Set<Item> centers = new HashSet<>();
-        for (Category category :
+        for (Cluster cluster :
                 categories) {
             Item item = dataSet.get(rnd.nextInt(dataSet.size()));
-            item.setCategory(category);
+            item.setCluster(cluster);
             dataSet.remove(item);//Remove temporary the center of the dataSet to avoid having two centers for the same item.
             tmp.add(item);
-            category.setBarycenter(item);
+            cluster.setBarycenter(item);
         }
         dataSet.addAll(tmp);
     }
@@ -120,8 +122,8 @@ public class Environment {
         Random rnd = new Random();
         for (Item item :
                 dataSet) {
-            item.setCategory(categories.get(rnd.nextInt(categories.size())));
-            itemsByCategory.get(item.getCategory()).add(item);
+            item.setCluster(categories.get(rnd.nextInt(categories.size())));
+            itemsByCategory.get(item.getCluster()).add(item);
         }
 
         initialDataSets.put(currentIterationID, new ArrayList<>(dataSet));
@@ -132,14 +134,14 @@ public class Environment {
      */
     private void computeVariance() {
         double variance=0d;
-        for (Category category :
+        for (Cluster cluster :
                 categories) {
             for (Item item :
-                    itemsByCategory.get(category)) {
-                variance+=varianceDistance.computeDistance(item,category.getBarycenter());
+                    itemsByCategory.get(cluster)) {
+                variance+=varianceDistance.computeDistance(item, cluster.getBarycenter());
             }
         }
-        finalVariance.put(currentIterationID,variance);
+        finalVariance.put(currentIterationID-1,variance);
     }
 
     /**
@@ -150,14 +152,14 @@ public class Environment {
                 dataSet) {
             Item nearest = null;
             double min = Double.MAX_VALUE;
-            for (Category category:
+            for (Cluster cluster :
                     categories) {
-                double tmp = distance.computeDistance(category.getBarycenter(),item);
+                double tmp = distance.computeDistance(cluster.getBarycenter(),item);
                 if(tmp<min) {
-                    item.setCategory(category);
+                    item.setCluster(cluster);
                 }
             }
-            itemsByCategory.get(item.getCategory()).add(item);
+            itemsByCategory.get(item.getCluster()).add(item);
         }
     }
 
@@ -166,9 +168,10 @@ public class Environment {
      */
     private boolean findGravityCenter() {
         boolean isComplete = true;
-        for (Category category :
+        for (Cluster cluster :
                 categories) {
-            isComplete= isComplete && category.computeBarycenter(itemsByCategory.get(category));
+            boolean tmp = cluster.computeBarycenter(itemsByCategory.get(cluster));
+            isComplete= isComplete && tmp;
         }
         return isComplete;
     }
@@ -178,15 +181,15 @@ public class Environment {
     *   loop on dataSet once more
     private void findGravityCenter() {
         //Initialization
-        Map<Category,Set<Item>> itemsByCategory = new HashMap<>();
-        for (Category category :
+        Map<Cluster,Set<Item>> itemsByCategory = new HashMap<>();
+        for (Cluster category :
                 categories) {
             itemsByCategory.put(category,new HashSet<>());
         }
 
         for (Item item :
                 dataSet) {
-            itemsByCategory.get(item.getCategory()).add(item);
+            itemsByCategory.get(item.getCluster()).add(item);
         }
     }*/
 
