@@ -18,7 +18,7 @@ public class Reader {
         while ((line = br.readLine()) != null) {
             String[] input = line.split(";");
             Item item = new Item();
-            for(int i = 0; i < input.length-1; i++){
+            for(int i = 0; i < input.length; i++){
                 if(!initialized){
                     variables.add(new Variable(i));
                 }

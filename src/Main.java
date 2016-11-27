@@ -5,9 +5,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] Args){
-        String path = "data.csv";
-        int clusterSize = 16;
-        int nbIteration = 10;
+        String path = "data2.csv";
+        int clusterSize =3;
+        int nbIteration = 1;
         Environment environment= new Environment();
         try {
             new Reader(path, environment);

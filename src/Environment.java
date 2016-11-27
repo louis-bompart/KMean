@@ -127,7 +127,7 @@ public class Environment {
         ArrayList<Item> clusterItems = new ArrayList<>(unaffectedItems);
         while (clusterItems.size() > nbPoints) {
             Item toRemove = null;
-            double max = Double.MIN_VALUE;
+            double max = -1d;
             for (Item item : clusterItems
                     ) {
                 double tmp = distance.computeDistance(item,cluster.getBarycenter());
