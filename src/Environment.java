@@ -69,8 +69,9 @@ public class Environment {
      * The magical function. It does everything (well running the KMean algorithm.)
      */
     public void computeKMean(int nbIt, int nbCat) {
-        generateRandomCategories(nbCat);
         while (currentIterationID<nbIt+1) {
+            clearer();
+            generateRandomCategories(currentIterationID);
             //generateRandomCenter();
             for (Cluster cluster :
                     categories) {
@@ -85,14 +86,18 @@ public class Environment {
                 done = findGravityCenter();
             }
             computeVariance();
-            displayResult();
             currentIterationID++;
         }
+        displayResult();
     }
-
+    private void clearer() {
+        itemsByCategory.clear();
+        categories.clear();
+    }
     private void generateRandomCategories(int nbCat) {
         for (int i = 0; i < nbCat; i++) {
             categories.add((new Cluster()));
+
             categories.get(i).addAll(dataSet.get(0).keySet());
         }
     }
@@ -150,16 +155,16 @@ public class Environment {
     private void affectAllItems() {
         for (Item item :
                 dataSet) {
-            Item nearest = null;
+            Cluster nearest = null;
             double min = Double.MAX_VALUE;
             for (Cluster cluster :
                     categories) {
                 double tmp = distance.computeDistance(cluster.getBarycenter(),item);
                 if(tmp<min) {
-                    item.setCluster(cluster);
+                    nearest = cluster;
                 }
             }
-            itemsByCategory.get(item.getCluster()).add(item);
+            itemsByCategory.get(nearest).add(item);
         }
     }
 
@@ -176,27 +181,38 @@ public class Environment {
         return isComplete;
     }
 
-    /*
-    *   First thought, but implementing this in affectAllItems avoid to
-    *   loop on dataSet once more
-    private void findGravityCenter() {
-        //Initialization
-        Map<Cluster,Set<Item>> itemsByCategory = new HashMap<>();
-        for (Cluster category :
-                categories) {
-            itemsByCategory.put(category,new HashSet<>());
-        }
-
-        for (Item item :
-                dataSet) {
-            itemsByCategory.get(item.getCluster()).add(item);
-        }
-    }*/
-
     private void displayResult() {
-        for (int i = 0; i < currentIterationID; i++) {
-            System.out.print("For iteration #" + i);
+        for (Integer i: finalVariance.keySet()
+             ) {
+            System.out.print("For iteration #" + (i+1));
             System.out.println(": "+ finalVariance.get(i));
+
         }
+//       System.out.println(getMin() + " - " + getMax());
+    }
+
+    private Double getMax(){
+        int i = 0;
+        Double max = finalVariance.get(0);
+        while(i<currentIterationID){
+            if(finalVariance.get(i)>max){
+                max = finalVariance.get(i);
+            }
+            i++;
+        }
+        return max;
+    }
+
+
+    private Double getMin(){
+        int i = 0;
+        Double min = finalVariance.get(0);
+        while(i<currentIterationID){
+            if(finalVariance.get(i)<min){
+                min = finalVariance.get(i);
+            }
+            i++;
+        }
+        return min;
     }
 }
