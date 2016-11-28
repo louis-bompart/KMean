@@ -75,18 +75,19 @@ public class Environment {
 //                itemsByCategory.put(cluster, new HashSet<>());
 //            }
 //            randomlyAffectAllItems();
+            clusters.clear();
             unaffectedItems.clear();
             unaffectedItems.addAll(dataSet);
             while (!unaffectedItems.isEmpty()) {
                 Cluster currentCluster = generateCluster();
                 currentCluster.computeBarycenter(unaffectedItems);
-                List<Item> clusterItem = RemoveFurthests(currentCluster, nbPoints);
+                List<Item> clusterItem = RemoveFurthests(currentCluster, currentIterationID);
                 AffectItems(clusterItem,currentCluster);
             }
-            computeVariance();
-            displayResult();
+            double watch = computeVariance();
             currentIterationID++;
         }
+        displayResult();
     }
 
     private Cluster generateCluster() {
@@ -99,16 +100,19 @@ public class Environment {
     /**
      * Compute the variance of the beginning.
      */
-    private void computeVariance() {
+    private double computeVariance() {
         double variance = 0d;
-        for (Cluster cluster :
-                clusters) {
             for (Item item :
                     dataSet) {
-                variance += varianceDistance.computeDistance(item, item.getCluster().getBarycenter());
+                try {
+                    variance += varianceDistance.computeDistance(item, item.getCluster().getBarycenter());
+                }
+                catch (NullPointerException e) {
+                    throw e;
+                }
             }
-        }
         finalVariance.put(currentIterationID - 1, variance);
+        return variance;
     }
 
     private float computeThing(Variable variable, Item barycenter) {
@@ -157,7 +161,7 @@ public class Environment {
 
     private void displayResult() {
         for (int i = 0; i < currentIterationID; i++) {
-            System.out.print("For iteration #" + i);
+            System.out.print("For iteration #" + (i+1));
             System.out.println(": " + finalVariance.get(i));
         }
     }

@@ -16,7 +16,7 @@ public class SquaredEuclideanDistance implements Distance {
         double distance=0;
         for (Variable var :
                 variables) {
-            distance =Math.pow((item.get(var)-center.get(var)),2);
+            distance +=Math.pow((item.get(var)-center.get(var)),2);
         }
         return distance;
     }

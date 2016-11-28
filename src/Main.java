@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] Args){
         String path = "data2.csv";
         int clusterSize =3;
-        int nbIteration = 1;
+        int nbIteration = 28;
         Environment environment= new Environment();
         try {
             new Reader(path, environment);
